@@ -6,14 +6,13 @@ import time
 from PyPDF2 import PdfReader
 import tempfile
 from datetime import datetime
-from transformers import AutoTokenizer, GPT2Tokenizer
+from transformers import AutoTokenizer
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Инициализация токенизатора
 #tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm")
-
 from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
@@ -200,23 +199,16 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
             st.markdown(response_text)
     else:
         # Формируем контекст из релевантных чанков
-        # context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
-        #                      for text, doc_name, page_num in relevant_chunks])
+        context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
+                             for text, doc_name, page_num in relevant_chunks])
         
-        # full_prompt = f"""Отвечай строго на основе предоставленных учебных материалов. 
-        # Если ответа нет в материалах, скажи "Ответ не найден в материалах".
+        full_prompt = f"""Отвечай строго на основе предоставленных учебных материалов. 
+        Если ответа нет в материалах, скажи "Ответ не найден в материалах".
         
-        
-        context = st.session_state.knowledge_base.get_all_text()
-        full_prompt = f""""Answer strictly based on the educational materials provided below.
-        Respond in the same language the question is written in.
-        If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
-
         Вопрос: {prompt}
         
         Релевантные материалы:
         {context}"""
-        
         
         data = {
             "model": "deepseek-chat",
@@ -224,22 +216,6 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
             "max_tokens": 2000,
             "temperature": 0.1  # Уменьшаем случайность ответов
         }
-        # Подготавливаем контекст из базы знаний
-        # context = st.session_state.knowledge_base.get_all_text()
-        # full_prompt = f""""Answer strictly based on the educational materials provided below.
-        # Respond in the same language the question is written in.
-        # If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
-        
-        # Materials:
-        # {context}
-        
-        # Question: {prompt}"""
-        
-        # data = {
-        #     "model": "deepseek-chat",
-        #     "messages": [{"role": "user", "content": full_prompt}],
-        #     "stream": True
-        # }
         
         with st.spinner("Ищем ответ..."):
             start_time = datetime.now()
