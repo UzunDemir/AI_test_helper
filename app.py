@@ -138,11 +138,17 @@ class KnowledgeBase:
                 reader = PdfReader(file)
                 text = ""
                 for page in reader.pages:
-                    text += page.extract_text() + "\n"
+                    page_text = page.extract_text()
+                    if page_text:  # Добавлена проверка на пустой текст
+                        text += page_text + "\n"
                 
-                self.documents[file_name] = text
-                self.uploaded_files.append(file_name)
-                return True
+                if text:  # Проверяем, что текст был извлечен
+                    self.documents[file_name] = text
+                    self.uploaded_files.append(file_name)
+                    return True
+                else:
+                    st.error(f"Не удалось извлечь текст из файла {file_name}")
+                    return False
         except Exception as e:
             st.error(f"Ошибка загрузки PDF: {e}")
             return False
@@ -162,6 +168,27 @@ if 'knowledge_base' not in st.session_state:
 
 if 'messages' not in st.session_state:
     st.session_state.messages = []
+
+# Добавьте этот CSS для улучшения отображения на мобильных
+st.markdown("""
+<style>
+    .stTextInput input, .stTextArea textarea {
+        font-size: 16px !important;
+    }
+    .stButton>button {
+        width: 100% !important;
+        font-size: 16px !important;
+    }
+    .stChatMessage {
+        max-width: 85% !important;
+    }
+    @media (max-width: 768px) {
+        .stTextInput input, .stTextArea textarea {
+            font-size: 14px !important;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Интерфейс Streamlit
 #st.title("AI-ассистент по тестам (строго по учебным материалам)")
