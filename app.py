@@ -226,14 +226,14 @@ if 'knowledge_base' not in st.session_state:
 if 'messages' not in st.session_state:
     st.session_state.messages = []
 
-# Интерфейс
-st.markdown("""
-<div class="center">
-    <h1>TEST-passer</h1>
-    <h2>AI-ассистент по тестам</h2>
-    <p>(строго по учебным материалам)</p>
-</div>
-""", unsafe_allow_html=True)
+# # Интерфейс
+# st.markdown("""
+# <div class="center">
+#     <h1>TEST-passer</h1>
+#     <h2>AI-ассистент по тестам</h2>
+#     <p>(строго по учебным материалам)</p>
+# </div>
+# """, unsafe_allow_html=True)
 
 st.divider()
 
