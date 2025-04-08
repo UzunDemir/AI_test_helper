@@ -81,7 +81,7 @@ st.sidebar.write(
                         
                      """
     )
-st.divider()
+
 # Устанавливаем стиль для центрирования элементов
 st.markdown("""
     <style>
