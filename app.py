@@ -177,10 +177,10 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
     Respond in the same language the question is written in.
     If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
     
-    Материалы:
+    Materials:
     {context}
     
-    Вопрос: {prompt}"""
+    Question: {prompt}"""
     
     data = {
         "model": "deepseek-chat",
