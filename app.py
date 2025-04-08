@@ -17,6 +17,45 @@ from datetime import datetime
 #     st.error("API ключ не найден. Пожалуйста, создайте файл .env с DEEPSEEK_API_KEY")
 #     st.stop()
 
+hide_github_icon = """
+<style>
+.css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, .viewerBadge_text__1JaDK { 
+    display: none !important; 
+}
+#MainMenu, footer, header { 
+    display: none !important; 
+}
+</style>
+"""
+
+st.markdown(hide_github_icon, unsafe_allow_html=True)
+
+
+st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
+st.sidebar.write("[Github](https://github.com/UzunDemir)")
+st.sidebar.write("[Linkedin](https://www.linkedin.com/in/uzundemir/)")
+st.sidebar.title("Описание проекта")
+st.sidebar.title("Handwritten Digits Classifier MNIST")
+st.sidebar.divider()
+st.sidebar.write(
+        """
+                                       
+                     Эта приложка выполнена в рамках практической работы по модулю Computer Vision курса Machine Learning Advanced от Skillbox.
+                     
+                     1. Вначале была обучена модель распознавания рукописных цифр на базе MNIST (Modified National Institute of Standards and Technology database).
+                     Точность на тестовой выборке датасета должна быть не ниже 68%. Я использовал много разных моделей и остановил свой выбор на сверточной нейронной сети (Convolutional Neural Network, CNN)
+                     которая показала точность на тестовом наборе данных: 0.99.
+                     Ноутбук с исследованиями можно посмотреть [здесь.](https://github.com/UzunDemir/mnist_777/blob/main/RESEARCH%26MODEL/prepare_model.ipynb)
+                     2. Вторым шагом необходимо было обернуть готовую модель в сервис и запустить её как часть веб-приложения для распознавания самостоятельно написанных символов. 
+                     После этого нужно было создать docker-образ и запустить приложение в docker-контейнере.
+                     3. Я решил сделать [полноценное приложение, которое загружает изображение цифры и предсказывает ее](https://mnistpred.streamlit.app/). 
+                     Но как злостный перфекционист, я подумал: а что если самому рисовать цифру и пусть модель ее предсказывает! 
+                     Немного поискал как реализовать эту идею  и остановил свой выбор на Streamlit.
+                     И вот что получилось!
+                     
+                     """
+    )
+
 # Получение API ключа
 api_key = st.secrets.get("DEEPSEEK_API_KEY")
 if not api_key:
