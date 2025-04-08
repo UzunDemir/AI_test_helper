@@ -35,7 +35,7 @@ st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https:/
 st.sidebar.write("[Github](https://github.com/UzunDemir)")
 st.sidebar.write("[Linkedin](https://www.linkedin.com/in/uzundemir/)")
 st.sidebar.title("Описание проекта")
-st.sidebar.title("AI-ассистент по тестам")
+st.sidebar.title("TEST-passer (AI-ассистент по тестам)")
 st.sidebar.divider()
 st.sidebar.write(
         """
@@ -44,7 +44,7 @@ st.sidebar.write(
 
                      1. Как это работает? 
                      
-                        Студент загружает учебный материал в pdf. AI-ассистент отвечает на тесты, выбирая правильные ответы. Точность ответов на тестировании составила 88%.
+                        Студент загружает учебный материал в pdf. TEST-passer отвечает на тесты, выбирая правильные ответы. Точность ответов на тестировании составила 88%.
                      
                      2. Почему не воспользоваться обычными чатами (GPT, DeepSeek и т. д.)? 
                      
@@ -55,7 +55,7 @@ st.sidebar.write(
                         
                      3. Что делает приложение?    
                      
-                        * Загружает и обрабатывает pdf-файла.
+                        * Загружает и обрабатывает pdf-файлы (любые курсы, предметы, темы)
                         * Создает векторную базу данных
                         * Применяет динамический чанкинг (делит по смысловым границам)
                         * Гибридный поиск (HyDE + ключевые слова) 
@@ -84,7 +84,8 @@ st.markdown("""
     </style>
     <div class="center">
         <img src="https://github.com/UzunDemir/mnist_777/blob/main/200w.gif?raw=true">
-        <h1>AI-ассистент по тестам</h1>
+        <h1>TEST-passer</h1>
+        <h2>AI-ассистент по тестам</h2>
         <p> (строго по учебным материалам)</p>
     </div>
     """, unsafe_allow_html=True)
