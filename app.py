@@ -35,9 +35,9 @@ hide_github_icon = """
 st.markdown(hide_github_icon, unsafe_allow_html=True)
 
 
-st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
-st.sidebar.write("[Github](https://github.com/UzunDemir)")
-st.sidebar.write("[Linkedin](https://www.linkedin.com/in/uzundemir/)")
+# st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
+# st.sidebar.write("[Github](https://github.com/UzunDemir)")
+# st.sidebar.write("[Linkedin](https://www.linkedin.com/in/uzundemir/)")
 st.sidebar.title("Описание проекта")
 st.sidebar.title("TEST-passer (AI-ассистент по тестам)")
 st.sidebar.divider()
@@ -194,7 +194,7 @@ st.markdown("""
 #st.title("AI-ассистент по тестам (строго по учебным материалам)")
 
 # Загрузка документов
-uploaded_files = st.file_uploader("Загрузить PDF", type="pdf", accept_multiple_files=True)
+uploaded_files = st.file_uploader("Загрузить учебные материалы в PDF", type="pdf", accept_multiple_files=True)
 if uploaded_files:
     for uploaded_file in uploaded_files:
         if uploaded_file.name not in st.session_state.knowledge_base.get_document_names():
