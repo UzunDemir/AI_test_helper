@@ -6,7 +6,7 @@ import time
 from PyPDF2 import PdfReader
 import tempfile
 from datetime import datetime
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 # Загрузка переменных окружения
 load_dotenv()
