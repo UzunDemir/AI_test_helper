@@ -11,10 +11,24 @@ from dotenv import load_dotenv
 # Загрузка переменных окружения
 load_dotenv()
 
-# Получение API ключа
-api_key = os.getenv("DEEPSEEK_API_KEY")
+# # Получение API ключа
+# api_key = os.getenv("DEEPSEEK_API_KEY")
+# if not api_key:
+#     st.error("API ключ не найден. Пожалуйста, создайте файл .env с DEEPSEEK_API_KEY")
+#     st.stop()
+
+# Загрузка API ключа (универсальный способ)
+try:
+    # Пробуем получить из Streamlit Secrets
+    api_key = st.secrets["DEEPSEEK_API_KEY"]
+except:
+    # Если нет в Secrets, пробуем из .env (для локального тестирования)
+    from dotenv import load_dotenv
+    load_dotenv()
+    api_key = os.getenv("DEEPSEEK_API_KEY")
+
 if not api_key:
-    st.error("API ключ не найден. Пожалуйста, создайте файл .env с DEEPSEEK_API_KEY")
+    st.error("API ключ не найден. Проверьте Secrets или .env файл.")
     st.stop()
 
 url = "https://api.deepseek.com/v1/chat/completions"
