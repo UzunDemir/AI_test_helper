@@ -200,22 +200,38 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
             st.markdown(response_text)
     else:
         # Формируем контекст из релевантных чанков
-        context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
-                             for text, doc_name, page_num in relevant_chunks])
+        # context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
+        #                      for text, doc_name, page_num in relevant_chunks])
         
-        full_prompt = f"""Отвечай строго на основе предоставленных учебных материалов. 
-        Если ответа нет в материалах, скажи "Ответ не найден в материалах".
+        # full_prompt = f"""Отвечай строго на основе предоставленных учебных материалов. 
+        # Если ответа нет в материалах, скажи "Ответ не найден в материалах".
         
-        Вопрос: {prompt}
+        # Вопрос: {prompt}
         
-        Релевантные материалы:
-        {context}"""
+        # Релевантные материалы:
+        # {context}"""
+        
+        # data = {
+        #     "model": "deepseek-chat",
+        #     "messages": [{"role": "user", "content": full_prompt}],
+        #     "max_tokens": 2000,
+        #     "temperature": 0.1  # Уменьшаем случайность ответов
+        # }
+        # Подготавливаем контекст из базы знаний
+        context = st.session_state.knowledge_base.get_all_text()
+        full_prompt = f""""Answer strictly based on the educational materials provided below.
+        Respond in the same language the question is written in.
+        If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
+        
+        Materials:
+        {context}
+        
+        Question: {prompt}"""
         
         data = {
             "model": "deepseek-chat",
             "messages": [{"role": "user", "content": full_prompt}],
-            "max_tokens": 2000,
-            "temperature": 0.1  # Уменьшаем случайность ответов
+            "stream": True
         }
         
         with st.spinner("Ищем ответ..."):
