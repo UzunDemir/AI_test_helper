@@ -6,13 +6,16 @@ import time
 from PyPDF2 import PdfReader
 import tempfile
 from datetime import datetime
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, GPT2Tokenizer
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Инициализация токенизатора
-tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm")
+#tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm")
+
+from transformers import GPT2Tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 # Настройки Streamlit
 st.set_page_config(layout="wide", initial_sidebar_state="auto")
