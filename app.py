@@ -56,6 +56,29 @@ st.sidebar.write(
                      """
     )
 
+# Устанавливаем стиль для центрирования элементов
+st.markdown("""
+    <style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /height: 5vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 0vh;  /* отступ сверху */
+    }
+    .github-icon:hover {
+        color: #4078c0; /* Изменение цвета при наведении */
+    }
+    </style>
+    <div class="center">
+        <img src="https://github.com/UzunDemir/mnist_777/blob/main/200w.gif?raw=true">
+        <h1>Классификатор рукописных цифр</h1>
+        <p>Напишите (пока) только одну цифру!</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Получение API ключа
 api_key = st.secrets.get("DEEPSEEK_API_KEY")
 if not api_key:
