@@ -173,8 +173,9 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
     
     # Подготавливаем контекст из базы знаний
     context = st.session_state.knowledge_base.get_all_text()
-    full_prompt = f"""Ответь строго по учебным материалам. Если ответа нет в материалах, 
-    скажи 'Ответ не найден в материалах'. Не придумывай информацию. Respond in the same language the question is written in.
+    full_prompt = f""""Answer strictly based on the educational materials provided below.
+    Respond in the same language the question is written in.
+    If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
     
     Материалы:
     {context}
