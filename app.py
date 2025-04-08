@@ -81,7 +81,7 @@ st.sidebar.write(
                         
                      """
     )
-
+st.divider()
 # Устанавливаем стиль для центрирования элементов
 st.markdown("""
     <style>
@@ -235,7 +235,7 @@ if 'messages' not in st.session_state:
 # </div>
 # """, unsafe_allow_html=True)
 
-st.divider()
+
 
 # Загрузка документов
 uploaded_files = st.file_uploader("Загрузить учебные материалы в PDF", type="pdf", accept_multiple_files=True)
