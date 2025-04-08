@@ -6,16 +6,13 @@ import time
 from PyPDF2 import PdfReader
 import tempfile
 from datetime import datetime
-#from dotenv import load_dotenv
 
-# Загрузка переменных окружения
-#load_dotenv()
-
-# # Получение API ключа
-# api_key = os.getenv("DEEPSEEK_API_KEY")
-# if not api_key:
-#     st.error("API ключ не найден. Пожалуйста, создайте файл .env с DEEPSEEK_API_KEY")
-#     st.stop()
+# Добавьте эту настройку в самое начало скрипта
+st.set_page_config(
+    layout="wide",
+    initial_sidebar_state="auto",
+    menu_items=None
+)
 
 hide_github_icon = """
 <style>
@@ -27,6 +24,9 @@ hide_github_icon = """
 }
 </style>
 """
+
+
+
 
 st.markdown(hide_github_icon, unsafe_allow_html=True)
 
