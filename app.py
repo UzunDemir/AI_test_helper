@@ -199,7 +199,7 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
         with st.chat_message("assistant"):
             st.markdown(response_text)
     else:
-        Формируем контекст из релевантных чанков
+        # Формируем контекст из релевантных чанков
         # context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
         #                      for text, doc_name, page_num in relevant_chunks])
         
