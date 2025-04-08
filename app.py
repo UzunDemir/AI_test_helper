@@ -178,10 +178,10 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
     full_prompt = f"""Answer strictly according to the educational materials. The answer must be in the same language in which the question was asked. 
     If there is no answer in the materials, say 'Answer not found in the materials'. Do not invent information.
     
-    Materials:
+    Материалы:
     {context}
     
-    Question: {prompt}"""
+    Вопрос: {prompt}"""
     
     data = {
         "model": "deepseek-chat",
