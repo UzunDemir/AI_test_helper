@@ -9,7 +9,7 @@ from datetime import datetime
 #from dotenv import load_dotenv
 
 # Загрузка переменных окружения
-load_dotenv()
+#load_dotenv()
 
 # # Получение API ключа
 # api_key = os.getenv("DEEPSEEK_API_KEY")
