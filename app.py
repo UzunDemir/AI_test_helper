@@ -199,7 +199,7 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
         with st.chat_message("assistant"):
             st.markdown(response_text)
     else:
-        # Формируем контекст из релевантных чанков
+        Формируем контекст из релевантных чанков
         # context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
         #                      for text, doc_name, page_num in relevant_chunks])
         
@@ -210,14 +210,6 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
         
         # Релевантные материалы:
         # {context}"""
-        
-        # data = {
-        #     "model": "deepseek-chat",
-        #     "messages": [{"role": "user", "content": full_prompt}],
-        #     "max_tokens": 2000,
-        #     "temperature": 0.1  # Уменьшаем случайность ответов
-        # }
-        # Подготавливаем контекст из базы знаний
         context = st.session_state.knowledge_base.get_all_text()
         full_prompt = f""""Answer strictly based on the educational materials provided below.
         Respond in the same language the question is written in.
@@ -231,8 +223,25 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
         data = {
             "model": "deepseek-chat",
             "messages": [{"role": "user", "content": full_prompt}],
-            "stream": True
+            "max_tokens": 2000,
+            "temperature": 0.1  # Уменьшаем случайность ответов
         }
+        # Подготавливаем контекст из базы знаний
+        # context = st.session_state.knowledge_base.get_all_text()
+        # full_prompt = f""""Answer strictly based on the educational materials provided below.
+        # Respond in the same language the question is written in.
+        # If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
+        
+        # Materials:
+        # {context}
+        
+        # Question: {prompt}"""
+        
+        # data = {
+        #     "model": "deepseek-chat",
+        #     "messages": [{"role": "user", "content": full_prompt}],
+        #     "stream": True
+        # }
         
         with st.spinner("Ищем ответ..."):
             start_time = datetime.now()
