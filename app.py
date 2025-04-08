@@ -206,19 +206,17 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
         # full_prompt = f"""Отвечай строго на основе предоставленных учебных материалов. 
         # Если ответа нет в материалах, скажи "Ответ не найден в материалах".
         
-        # Вопрос: {prompt}
         
-        # Релевантные материалы:
-        # {context}"""
         context = st.session_state.knowledge_base.get_all_text()
         full_prompt = f""""Answer strictly based on the educational materials provided below.
         Respond in the same language the question is written in.
         If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
+
+        Вопрос: {prompt}
         
-        Materials:
-        {context}
+        Релевантные материалы:
+        {context}"""
         
-        Question: {prompt}"""
         
         data = {
             "model": "deepseek-chat",
