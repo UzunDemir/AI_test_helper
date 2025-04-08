@@ -79,6 +79,13 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
+st.divider()
+# Настройки для канвы
+stroke_width = 10
+stroke_color = "black"
+bg_color = "white"
+drawing_mode = "freedraw"
+
 # Получение API ключа
 api_key = st.secrets.get("DEEPSEEK_API_KEY")
 if not api_key:
