@@ -74,8 +74,8 @@ st.markdown("""
     </style>
     <div class="center">
         <img src="https://github.com/UzunDemir/mnist_777/blob/main/200w.gif?raw=true">
-        <h1>Классификатор рукописных цифр</h1>
-        <p>Напишите (пока) только одну цифру!</p>
+        <h1>AI-ассистент по тестам</h1>
+        <p> (строго по учебным материалам)</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -140,7 +140,7 @@ if 'messages' not in st.session_state:
     st.session_state.messages = []
 
 # Интерфейс Streamlit
-st.title("AI-ассистент по тестам (строго по учебным материалам)")
+#st.title("AI-ассистент по тестам (строго по учебным материалам)")
 
 # Загрузка документов
 uploaded_files = st.file_uploader("Загрузить PDF", type="pdf", accept_multiple_files=True)
