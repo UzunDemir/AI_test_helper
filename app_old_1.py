@@ -364,3 +364,12 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
 if st.button("Очистить чат"):
     st.session_state.messages = []
     st.rerun()
+
+
+# streamlit>=1.32.0
+# requests>=2.31.0
+# PyPDF2>=3.0.1
+# numpy>=1.26.0
+# scikit-learn>=1.3.0
+# transformers>=4.37.0
+# python-dotenv>=1.0.0
