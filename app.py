@@ -19,29 +19,34 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
     <style>
-    /* 1. Скрываем блок с кнопками Share, Star, GitHub, Deploy и меню */
+    /* 1. Скрываем весь правый блок кнопок (Share, Deploy и т.д.) */
     [data-testid="stHeaderActionElements"], 
-    #MainMenu {
-        display: none;
+    .st-emotion-cache-12fmjuu, 
+    .stAppDeployButton {
+        display: none !important;
     }
 
-    /* 2. Делаем фон хедера прозрачным, чтобы он не перекрывал контент */
+    /* 2. Скрываем стандартное меню (три точки) */
+    #MainMenu {
+        display: none !important;
+    }
+
+    /* 3. Делаем хедер прозрачным и убираем его высоту, чтобы не мешал */
     [data-testid="stHeader"] {
         background-color: rgba(0,0,0,0);
+        height: 3rem; /* Оставляем высоту только для стрелочки */
     }
 
-    /* 3. Гарантируем, что кнопка сайдбара (стрелочка) остается видимой */
+    /* 4. Убеждаемся, что стрелка сайдбара видима */
     [data-testid="stSidebarCollapseButton"] {
-        visibility: visible;
+        visibility: visible !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-with st.sidebar:
-    st.write("Боковая панель работает")
-
 st.title("Чистый интерфейс")
-st.write("Лишние кнопки сверху скрыты.")
+st.write("Теперь справа должно быть пусто.")
+
 
 
 #################################
