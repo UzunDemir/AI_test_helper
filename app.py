@@ -16,23 +16,34 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
-# Настройки Streamlit
-st.set_page_config(layout="wide", initial_sidebar_state="auto")
 st.markdown("""
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, 
-    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, 
-    .viewerBadge_text__1JaDK, #MainMenu, footer, header { 
-        display: none !important; 
+    /* 1. Скрываем стандартное меню (три точки) и футер */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* 2. Скрываем кнопку 'Deploy' и индикаторы хостинга (Streamlit Cloud) */
+    .stAppDeployButton {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    
+    /* 3. Скрываем 'Viewer badge' (упомянутые вами viewerBadge) */
+    [data-testid="stViewerBadge"] {display: none !important;}
+    .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_ {display: none !important;}
+
+    /* 4. Очищаем верхнюю панель (header), но сохраняем кнопку сайдбара */
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+        color: rgba(0,0,0,0) !important;
     }
-    .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        flex-direction: column;
-        margin-top: 0vh;
+    
+    /* Делаем кнопку открытия сайдбара снова видимой (если она стала прозрачной) */
+    header button {
+        color: #31333F !important; /* Цвет иконки (черный/темный) */
+    }
+
+    /* 5. Убираем лишние отступы сверху для чистоты интерфейса */
+    .block-container {
+        padding-top: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
