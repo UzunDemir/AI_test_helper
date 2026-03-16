@@ -19,25 +19,17 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
     <style>
-    /* 1. Скрываем весь правый блок кнопок (Share, Deploy и т.д.) */
-    [data-testid="stHeaderActionElements"], 
-    .st-emotion-cache-12fmjuu, 
-    .stAppDeployButton {
+    /* Полностью скрываем правый блок управления (Share, Star, GitHub и т.д.) */
+    header div:nth-child(2) {
         display: none !important;
     }
 
-    /* 2. Скрываем стандартное меню (три точки) */
-    #MainMenu {
-        display: none !important;
-    }
-
-    /* 3. Делаем хедер прозрачным и убираем его высоту, чтобы не мешал */
+    /* Делаем хедер прозрачным, чтобы не было полос */
     [data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0);
-        height: 3rem; /* Оставляем высоту только для стрелочки */
+        background: rgba(0,0,0,0);
     }
 
-    /* 4. Убеждаемся, что стрелка сайдбара видима */
+    /* Оставляем стрелку сайдбара видимой */
     [data-testid="stSidebarCollapseButton"] {
         visibility: visible !important;
     }
@@ -45,7 +37,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("Чистый интерфейс")
-st.write("Теперь справа должно быть пусто.")
+st.write("Теперь справа точно должно быть пусто.")
+
 
 
 
