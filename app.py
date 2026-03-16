@@ -25,7 +25,7 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.set_page_config(
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="auto"
 )
 
 st.markdown("""
@@ -34,7 +34,7 @@ st.markdown("""
 <style>
 
 #MainMenu {visibility:hidden;}
-footer {visibility:hidden;}
+footer, header {visibility:hidden;}
 
 .center {
     display:flex;
