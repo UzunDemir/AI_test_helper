@@ -18,30 +18,29 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем только правую часть хедера (ваши иконки) */
-    [data-testid="stHeader"] > div:first-child > div:nth-child(2) {
+    /* 1. Скрываем ТОЛЬКО правую часть верхней панели (иконки из скриншота) */
+    header[data-testid="stHeader"] > div:first-child > div:nth-child(2) {
         display: none !important;
     }
 
-    /* 2. Скрываем кнопку 'Deploy' (если она еще там) */
-    .stAppDeployButton {
-        display: none !important;
-    }
-
-    /* 3. ПРИНУДИТЕЛЬНО показываем кнопку сайдбара */
-    /* Мы делаем её контрастной, чтобы вы точно её увидели */
-    button[kind="headerNoPadding"] {
+    /* 2. ПРИНУДИТЕЛЬНО возвращаем и стилизуем кнопку сайдбара */
+    /* Она будет видна даже если хедер пытается её скрыть */
+    [data-testid="stSidebarCollapseButton"] {
         visibility: visible !important;
-        display: block !important;
-        color: #FF4B4B !important; /* Яркий красный цвет для проверки */
-        z-index: 999999 !important;
+        display: flex !important;
+        color: #31333F !important; /* Цвет иконки (темный) */
+        background-color: rgba(255, 255, 255, 0.8) !important; /* Легкий фон для видимости */
+        border-radius: 8px !important;
     }
 
-    /* 4. Убираем футер и меню 'три точки' */
+    /* 3. Скрываем футер и меню 'три точки' */
     footer {display: none !important;}
     #MainMenu {display: none !important;}
+    
+    /* 4. Скрываем кнопку Deploy */
+    .stAppDeployButton {display: none !important;}
 
-    /* 5. Корректируем отступ сверху */
+    /* Убираем лишний отступ сверху */
     .block-container {
         padding-top: 1rem !important;
     }
