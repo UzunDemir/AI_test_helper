@@ -52,13 +52,13 @@ footer {visibility:hidden;}
 # SIDEBAR TOGGLE
 # -----------------------------
 
-if "sidebar_open" not in st.session_state:
-    st.session_state.sidebar_open = True
+# if "sidebar_open" not in st.session_state:
+#     st.session_state.sidebar_open = True
 
-toggle = st.button("☰", help="Показать / скрыть меню")
+# toggle = st.button("☰", help="Показать / скрыть меню")
 
-if toggle:
-    st.session_state.sidebar_open = not st.session_state.sidebar_open
+# if toggle:
+#     st.session_state.sidebar_open = not st.session_state.sidebar_open
 
 
 # -----------------------------
