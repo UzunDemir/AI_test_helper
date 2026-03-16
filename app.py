@@ -18,32 +18,24 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем стандартное меню (три точки) и футер */
+    /* 1. Скрываем панель с иконками (GitHub, Star, Edit, Share) */
+    [data-testid="stToolbar"] {
+        visibility: hidden;
+        display: none !important;
+    }
+
+    /* 2. Убираем 'Viewer Badge' (ссылка внизу, если есть) */
+    [data-testid="stViewerBadge"] {
+        display: none !important;
+    }
+
+    /* 3. Скрываем стандартное меню и футер */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
-    /* 2. Скрываем кнопку 'Deploy' и индикаторы хостинга (Streamlit Cloud) */
-    .stAppDeployButton {display: none !important;}
-    [data-testid="stStatusWidget"] {display: none !important;}
-    
-    /* 3. Скрываем 'Viewer badge' (упомянутые вами viewerBadge) */
-    [data-testid="stViewerBadge"] {display: none !important;}
-    .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_ {display: none !important;}
 
-    /* 4. Очищаем верхнюю панель (header), но сохраняем кнопку сайдбара */
+    /* 4. Очищаем хедер, но оставляем кнопку сайдбара живой */
     header[data-testid="stHeader"] {
         background: transparent !important;
-        color: rgba(0,0,0,0) !important;
-    }
-    
-    /* Делаем кнопку открытия сайдбара снова видимой (если она стала прозрачной) */
-    header button {
-        color: #31333F !important; /* Цвет иконки (черный/темный) */
-    }
-
-    /* 5. Убираем лишние отступы сверху для чистоты интерфейса */
-    .block-container {
-        padding-top: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
