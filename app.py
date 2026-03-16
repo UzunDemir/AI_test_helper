@@ -18,29 +18,26 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Делаем панель инструментов (Share, Star и т.д.) невидимой */
+    /* 1. Скрываем ненужный мусор (меню и футер) */
+    #MainMenu, footer, .stAppDeployButton { display: none !important; }
+
+    /* 2. Делаем контейнер тулбара прозрачным, чтобы иконки исчезли */
     [data-testid="stToolbar"] {
-        visibility: hidden !important;
         opacity: 0 !important;
+        pointer-events: none !important; /* Чтобы по ним нельзя было кликнуть */
     }
 
-    /* 2. ПРИНУДИТЕЛЬНО возвращаем видимость кнопке сайдбара */
-    /* Мы перебиваем общее правило видимости для конкретной кнопки */
-    [data-testid="stHeader"] button[data-testid="stSidebarCollapseButton"] {
+    /* 3. ВОСКРЕШАЕМ кнопку сайдбара */
+    /* Мы вытаскиваем её из прозрачного контейнера и делаем видимой */
+    [data-testid="stSidebarCollapseButton"] {
         visibility: visible !important;
         opacity: 1 !important;
-        color: #31333F !important; /* Темный цвет иконки */
-        background-color: rgba(240, 242, 246, 0.5) !important; /* Легкая подложка */
-    }
-
-    /* 3. Скрываем остальные системные элементы */
-    .stAppDeployButton { display: none !important; }
-    footer { display: none !important; }
-    #MainMenu { display: none !important; }
-
-    /* 4. Если кнопка все равно скрыта из-за контейнера, выводим её на передний план */
-    header[data-testid="stHeader"] {
-        z-index: 999 !important;
+        pointer-events: auto !important; /* Возвращаем кликабельность */
+        color: #31333F !important;
+        position: fixed !important; /* Фиксируем её в углу, чтобы она не зависела от хедера */
+        left: 10px !important;
+        top: 10px !important;
+        z-index: 99999 !important;
     }
 </style>
 """, unsafe_allow_html=True)
