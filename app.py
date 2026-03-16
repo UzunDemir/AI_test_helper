@@ -18,31 +18,31 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем ТОЛЬКО правую часть верхней панели (иконки из скриншота) */
-    header[data-testid="stHeader"] > div:first-child > div:nth-child(2) {
+    /* 1. Скрываем все элементы в правой части хедера (Share, Star, GitHub и т.д.) */
+    [data-testid="stHeader"] [data-testid="stToolbar"] {
         display: none !important;
     }
 
-    /* 2. ПРИНУДИТЕЛЬНО возвращаем и стилизуем кнопку сайдбара */
-    /* Она будет видна даже если хедер пытается её скрыть */
-    [data-testid="stSidebarCollapseButton"] {
+    /* 2. Скрываем кнопку Deploy и другие системные элементы */
+    .stAppDeployButton { display: none !important; }
+    [data-testid="stStatusWidget"] { display: none !important; }
+
+    /* 3. ВОЗВРАЩАЕМ кнопку сайдбара (три полоски) */
+    /* Мы обращаемся к ней через атрибут кнопки, чтобы она точно осталась */
+    header[data-testid="stHeader"] button[data-testid="stSidebarCollapseButton"] {
         visibility: visible !important;
         display: flex !important;
-        color: #31333F !important; /* Цвет иконки (темный) */
-        background-color: rgba(255, 255, 255, 0.8) !important; /* Легкий фон для видимости */
-        border-radius: 8px !important;
+        opacity: 1 !important;
+        color: #31333F !important; /* Цвет иконки */
     }
 
-    /* 3. Скрываем футер и меню 'три точки' */
-    footer {display: none !important;}
-    #MainMenu {display: none !important;}
-    
-    /* 4. Скрываем кнопку Deploy */
-    .stAppDeployButton {display: none !important;}
+    /* 4. Чистим остальное (меню и футер) */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 
-    /* Убираем лишний отступ сверху */
+    /* 5. Корректируем отступ сверху, чтобы чат не "прилипал" */
     .block-container {
-        padding-top: 1rem !important;
+        padding-top: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
