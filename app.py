@@ -1,366 +1,382 @@
 import os
 import streamlit as st
 import requests
-import json
-import time
-from PyPDF2 import PdfReader
 import tempfile
-from datetime import datetime
-from transformers import AutoTokenizer
 import numpy as np
+import faiss
+import time
+
+from datetime import datetime
+from PyPDF2 import PdfReader
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Инициализация токенизатора
-#tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-llm")
-from transformers import GPT2Tokenizer
-tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+from sentence_transformers import SentenceTransformer, CrossEncoder
 
+# ---------------- STREAMLIT CONFIG ----------------
 
-st.markdown("""
-    <style>
-    /* Полностью скрываем правый блок управления (Share, Star, GitHub и т.д.) */
-    header div:nth-child(2) {
-        display: none !important;
-    }
+st.set_page_config(layout="wide", initial_sidebar_state="auto")
 
-    /* Делаем хедер прозрачным, чтобы не было полос */
-    [data-testid="stHeader"] {
-        background: rgba(0,0,0,0);
-    }
+# ---------------- MODEL CACHE ----------------
 
-    /* Оставляем стрелку сайдбара видимой */
-    [data-testid="stSidebarCollapseButton"] {
-        visibility: visible !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
+@st.cache_resource
+def load_embedder():
+    return SentenceTransformer("all-MiniLM-L6-v2")
 
+@st.cache_resource
+def load_reranker():
+    return CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
+embedder = load_embedder()
+reranker = load_reranker()
 
-#################################
+# ---------------- DEEPSEEK API ----------------
 
-# st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
-# st.sidebar.write("[Github](https://github.com/UzunDemir)")
-# st.sidebar.write("[Linkedin](https://www.linkedin.com/in/uzundemir/)")
-st.sidebar.title("Описание проекта")
-st.sidebar.title("TEST-passer (AI-ассистент по тестам)")
-st.sidebar.divider()
-st.sidebar.write(
-        """
-                                       
-                     Это приложение выполнено в целях помощи студентам при сдаче тестов по ЛЮБОЙ образовательной теме.                  
-
-     1. Как это работает? 
-     
-        Студент загружает учебный материал в pdf. TEST-passer отвечает на тесты, выбирая правильные ответы. Точность ответов на тестировании составила 88%.
-     
-     2. Почему не воспользоваться обычными чатами (GPT, DeepSeek и т. д.)? 
-     
-        Несмотря на то что модель обучена на огромном 
-        количестве информации, она не понимает информацию, как человек, а лишь предсказывает "вероятный следующий фрагмент текста". 
-        Она также имеет способность "галлюцинировать", то есть может "придумать" факт, источник или термин, которого не существует, но звучит правдоподобно.
-        Поэтому наиболее правильные ответы будет выдавать модель, которая использует только НУЖНЫЙ иатериал. 
-        
-     3. Что делает приложение?    
-     
-        * Загружает и обрабатывает pdf-файлы (любые курсы, предметы, темы)
-        * Создает векторную базу данных
-        * Применяет динамический чанкинг (делит по смысловым границам)
-        * Гибридный поиск (HyDE + ключевые слова) 
-          (комбинирует два метода поиска, чтобы находить ответы, если он сформулирован иначе чем в учебных материалах)
-        * Валидация ответов
-        * Настройка DeepSeek для генерации ответов (можно использовать и другие модели) 
-
-                        
-
-    4. Приложение доработано. Ключевые улучшения:
-
-    Чанкинг документов:
-
-        * Текст разбивается на смысловые блоки (по абзацам) с ограничением по количеству токенов
-
-        * Используется токенизатор DeepSeek для точного подсчета токенов
-
-    Поиск релевантных фрагментов:
-
-        * Реализован TF-IDF + косинусное сходство для поиска наиболее релевантных частей документа
-
-        * В контекст попадают только 3 наиболее релевантных фрагмента
-
-    Улучшенный промпт:
-
-        * Четкие инструкции модели отвечать только по материалам
-
-        * Добавлены ссылки на источники (документ и страница)
-
-    Параметры API:
-
-        * Уменьшена температура (temperature=0.1) для более точных ответов
-
-        * Ограничение на количество токенов в ответе
-
-    Обработка больших документов:
-
-        * Документы обрабатываются постранично
-
-        * В API отправляются только релевантные части
-                     
-    5. Будут ли доработки?
-    
-    Да, будут:
-    
-    * возможность загрузки вопросов в виде скриншотов
-    * комбинирование методов и моделей (ансамблирование) для получения максимально точных ответов
-    * уменьшение времени поиска ответа 
-                     
-                        
-                     """
-    )
-
-# Устанавливаем стиль для центрирования элементов
-st.markdown("""
-    <style>
-    .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /height: 5vh;
-        text-align: center;
-        flex-direction: column;
-        margin-top: 0vh;  /* отступ сверху */
-    }
-    .github-icon:hover {
-        color: #4078c0; /* Изменение цвета при наведении */
-    }
-    </style>
-    <div class="center">
-        <img src="https://github.com/UzunDemir/mnist_777/blob/main/200w.gif?raw=true">
-        <h1>TEST-passer</h1>
-        <h2>AI-ассистент по тестам</h2>
-        <p> (строго по учебным материалам)</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.divider()
-# Настройки для канвы
-stroke_width = 10
-stroke_color = "black"
-bg_color = "white"
-drawing_mode = "freedraw"
-
-# Получение API ключа
 api_key = st.secrets.get("DEEPSEEK_API_KEY")
-if not api_key:
-    st.error("API ключ не настроен. Пожалуйста, добавьте его в Secrets.")
-    st.stop()
 
 url = "https://api.deepseek.com/v1/chat/completions"
+
 headers = {
     "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json"
 }
 
+# ---------------- DATA STRUCTURES ----------------
+
 class DocumentChunk:
+
     def __init__(self, text, doc_name, page_num):
         self.text = text
         self.doc_name = doc_name
         self.page_num = page_num
-        self.embedding = None
+
+
+# ---------------- KNOWLEDGE BASE ----------------
 
 class KnowledgeBase:
+
     def __init__(self):
+
         self.chunks = []
-        self.uploaded_files = []
-        self.vectorizer = TfidfVectorizer(stop_words='english')
+        self.embeddings = []
+
+        self.index = None
+
+        self.vectorizer = TfidfVectorizer()
         self.tfidf_matrix = None
         self.doc_texts = []
-    
-    def split_text(self, text, max_tokens=2000):
-        paragraphs = text.split('\n\n')
+
+        self.uploaded_files = []
+
+    # ---------- CHUNKING ----------
+
+    def split_text(self, text, max_chars=1500):
+
+        paragraphs = text.split("\n\n")
         chunks = []
-        current_chunk = ""
-        
+
+        current = ""
+
         for para in paragraphs:
-            para = para.strip()
-            if not para:
-                continue
-                
-            tokens = tokenizer.tokenize(para)
-            if len(tokenizer.tokenize(current_chunk + para)) > max_tokens:
-                if current_chunk:
-                    chunks.append(current_chunk)
-                    current_chunk = para
-                else:
-                    chunks.append(para)
-                    current_chunk = ""
+
+            if len(current) + len(para) < max_chars:
+                current += para + "\n\n"
+
             else:
-                if current_chunk:
-                    current_chunk += "\n\n" + para
-                else:
-                    current_chunk = para
-        
-        if current_chunk:
-            chunks.append(current_chunk)
-            
+                chunks.append(current)
+                current = para
+
+        if current:
+            chunks.append(current)
+
         return chunks
-    
+
+    # ---------- PDF LOADING ----------
+
     def load_pdf(self, file_content, file_name):
+
+        tmp_path = None
+
         try:
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-                tmp_file.write(file_content)
-                tmp_file_path = tmp_file.name
-            
-            with open(tmp_file_path, 'rb') as file:
-                reader = PdfReader(file)
-                for page_num, page in enumerate(reader.pages):
-                    page_text = page.extract_text()
-                    if page_text:
-                        chunks = self.split_text(page_text)
-                        for chunk in chunks:
-                            self.chunks.append(DocumentChunk(
-                                text=chunk,
-                                doc_name=file_name,
-                                page_num=page_num + 1
-                            ))
-                            self.doc_texts.append(chunk)
-                
-                if self.chunks:
-                    self.uploaded_files.append(file_name)
-                    # Обновляем TF-IDF матрицу
-                    self.tfidf_matrix = self.vectorizer.fit_transform(self.doc_texts)
-                    return True
-                else:
-                    st.error(f"Не удалось извлечь текст из файла {file_name}")
-                    return False
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+                tmp.write(file_content)
+                tmp_path = tmp.name
+
+            reader = PdfReader(tmp_path)
+
+            for page_num, page in enumerate(reader.pages):
+
+                text = page.extract_text()
+
+                if text:
+
+                    chunks = self.split_text(text)
+
+                    for chunk in chunks:
+
+                        c = DocumentChunk(chunk, file_name, page_num + 1)
+
+                        self.chunks.append(c)
+
+                        self.doc_texts.append(chunk)
+
+                        emb = embedder.encode(chunk)
+
+                        self.embeddings.append(emb)
+
+            self.uploaded_files.append(file_name)
+
+            # TF-IDF
+
+            self.tfidf_matrix = self.vectorizer.fit_transform(self.doc_texts)
+
+            # FAISS
+
+            vectors = np.array(self.embeddings).astype("float32")
+
+            dim = vectors.shape[1]
+
+            self.index = faiss.IndexFlatL2(dim)
+            self.index.add(vectors)
+
+            return True
+
         except Exception as e:
-            st.error(f"Ошибка загрузки PDF: {e}")
+
+            st.error(f"PDF error: {e}")
             return False
+
         finally:
-            if os.path.exists(tmp_file_path):
-                os.unlink(tmp_file_path)
-    
-    def find_most_relevant_chunks(self, query, top_k=3):
-        """Находит наиболее релевантные чанки с помощью TF-IDF и косинусного сходства"""
-        if not self.chunks:
-            return []
-            
-        query_vec = self.vectorizer.transform([query])
-        similarities = cosine_similarity(query_vec, self.tfidf_matrix)
-        top_indices = np.argsort(similarities[0])[-top_k:][::-1]
-        
-        return [(self.chunks[i].text, self.chunks[i].doc_name, self.chunks[i].page_num) 
-                for i in top_indices if similarities[0][i] > 0.1]
-    
-    def get_document_names(self):
-        return self.uploaded_files
 
-# Инициализация
-if 'knowledge_base' not in st.session_state:
-    st.session_state.knowledge_base = KnowledgeBase()
+            if tmp_path and os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
-if 'messages' not in st.session_state:
-    st.session_state.messages = []
+    # ---------- HYDE ----------
 
-# # Интерфейс
-# st.markdown("""
-# <div class="center">
-#     <h1>TEST-passer</h1>
-#     <h2>AI-ассистент по тестам</h2>
-#     <p>(строго по учебным материалам)</p>
-# </div>
-# """, unsafe_allow_html=True)
+    def generate_hypothetical(self, query):
 
+        prompt = f"""
+Write a short paragraph that answers the question.
 
+Question:
+{query}
 
-# Загрузка документов
-uploaded_files = st.file_uploader("Загрузить учебные материалы в PDF", type="pdf", accept_multiple_files=True)
-if uploaded_files:
-    for uploaded_file in uploaded_files:
-        if uploaded_file.name not in st.session_state.knowledge_base.get_document_names():
-            success = st.session_state.knowledge_base.load_pdf(uploaded_file.getvalue(), uploaded_file.name)
-            if success:
-                st.success(f"Файл {uploaded_file.name} успешно загружен")
+Answer:
+"""
 
-# Отображение загруженных документов
-if st.session_state.knowledge_base.get_document_names():
-    st.subheader("📚 Загруженные документы:")
-    for doc in st.session_state.knowledge_base.get_document_names():
-        st.markdown(f"- {doc}")
-else:
-    st.info("ℹ️ Документы не загружены")
-
-# Отображение истории сообщений
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# Ввод вопроса
-if prompt := st.chat_input("Введите ваш вопрос..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-    
-    # Поиск наиболее релевантных чанков
-    relevant_chunks = st.session_state.knowledge_base.find_most_relevant_chunks(prompt)
-    
-    if not relevant_chunks:
-        response_text = "Ответ не найден в материалах ❌"
-        st.session_state.messages.append({"role": "assistant", "content": response_text})
-        with st.chat_message("assistant"):
-            st.markdown(response_text)
-    else:
-        # Формируем контекст из релевантных чанков
-        context = "\n\n".join([f"Документ: {doc_name}, страница {page_num}\n{text}" 
-                             for text, doc_name, page_num in relevant_chunks])
-        
-        full_prompt = f"""Answer strictly based on the educational materials provided below.
-     Respond in the same language the question is written in.
-     If the answer is not found in the materials, reply with: 'Answer not found in the materials'.
-    
-    
-        
-        educational materials: {prompt}
-        
-        relevant materials:
-        {context}"""
-        
         data = {
             "model": "deepseek-chat",
-            "messages": [{"role": "user", "content": full_prompt}],
-            "max_tokens": 2000,
-            "temperature": 0.1  # Уменьшаем случайность ответов
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 200,
+            "temperature": 0.3
         }
-        
-        with st.spinner("Ищем ответ..."):
-            start_time = datetime.now()
-            
-            try:
-                response = requests.post(url, headers=headers, json=data)
-                
-                if response.status_code == 200:
-                    response_data = response.json()
-                    full_response = response_data['choices'][0]['message']['content']
-                    
-                    # Добавляем ссылки на источники
-                    sources = "\n\nИсточники:\n" + "\n".join(
-                        [f"- {doc_name}, стр. {page_num}" for _, doc_name, page_num in relevant_chunks]
-                    )
-                    full_response += sources
-                    
-                    st.session_state.messages.append({"role": "assistant", "content": full_response})
-                    with st.chat_message("assistant"):
-                        st.markdown(full_response + " ✅")
-                    
-                    end_time = datetime.now()
-                    duration = (end_time - start_time).total_seconds()
-                    st.info(f"⏱️ Поиск ответа занял {duration:.2f} секунд")
-                else:
-                    st.error(f"Ошибка API: {response.status_code} - {response.text}")
-            except Exception as e:
-                st.error(f"Произошла ошибка: {str(e)}")
 
-# Кнопка очистки чата
-if st.button("Очистить чат"):
+        try:
+
+            r = requests.post(url, headers=headers, json=data, timeout=30)
+
+            if r.status_code == 200:
+                return r.json()['choices'][0]['message']['content']
+
+        except:
+            pass
+
+        return query
+
+    # ---------- SEMANTIC SEARCH ----------
+
+    def semantic_search(self, query, top_k=6):
+
+        q = embedder.encode([query]).astype("float32")
+
+        distances, indices = self.index.search(q, top_k)
+
+        results = []
+
+        for idx in indices[0]:
+            results.append(self.chunks[idx])
+
+        return results
+
+    # ---------- KEYWORD SEARCH ----------
+
+    def keyword_search(self, query, top_k=6):
+
+        q = self.vectorizer.transform([query])
+
+        sims = cosine_similarity(q, self.tfidf_matrix)
+
+        idx = np.argsort(sims[0])[-top_k:]
+
+        results = []
+
+        for i in idx:
+            results.append(self.chunks[i])
+
+        return results
+
+    # ---------- HYBRID + RERANK ----------
+
+    def retrieve(self, query, top_k=3):
+
+        hypothetical = self.generate_hypothetical(query)
+
+        search_query = query + " " + hypothetical
+
+        semantic = self.semantic_search(search_query)
+
+        keyword = self.keyword_search(search_query)
+
+        combined = semantic + keyword
+
+        unique = list({c.text: c for c in combined}.values())
+
+        pairs = [[query, c.text] for c in unique]
+
+        scores = reranker.predict(pairs)
+
+        ranked = sorted(
+            zip(unique, scores),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        top = ranked[:top_k]
+
+        return [x[0] for x in top]
+
+
+# ---------------- SESSION ----------------
+
+if "kb" not in st.session_state:
+    st.session_state.kb = KnowledgeBase()
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+kb = st.session_state.kb
+
+# ---------------- UI ----------------
+
+st.title("TEST-passer")
+st.write("AI ассистент для тестов (RAG)")
+
+# ---------- FILE UPLOAD ----------
+
+uploaded_files = st.file_uploader(
+    "Upload PDF",
+    type="pdf",
+    accept_multiple_files=True
+)
+
+if uploaded_files:
+
+    for f in uploaded_files:
+
+        if f.name not in kb.uploaded_files:
+
+            if kb.load_pdf(f.read(), f.name):
+
+                st.success(f"{f.name} loaded")
+
+
+# ---------- CHAT HISTORY ----------
+
+for m in st.session_state.messages:
+
+    with st.chat_message(m["role"]):
+        st.markdown(m["content"])
+
+
+# ---------- USER INPUT ----------
+
+if prompt := st.chat_input("Ask question"):
+
+    st.session_state.messages.append(
+        {"role": "user", "content": prompt}
+    )
+
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    start = datetime.now()
+
+    chunks = kb.retrieve(prompt)
+
+    if not chunks:
+
+        answer = "Answer not found in materials."
+
+    else:
+
+        context = ""
+
+        for c in chunks:
+
+            context += f"""
+Document: {c.doc_name}
+Page: {c.page_num}
+
+{c.text}
+
+"""
+
+        system_prompt = f"""
+You are an AI assistant answering exam questions.
+
+Rules:
+
+1. Use ONLY the provided materials.
+2. If answer not found say:
+"Answer not found in materials."
+
+Question:
+{prompt}
+
+Materials:
+{context}
+"""
+
+        data = {
+
+            "model": "deepseek-chat",
+
+            "messages": [
+                {"role": "user", "content": system_prompt}
+            ],
+
+            "temperature": 0.1,
+            "max_tokens": 1000
+        }
+
+        r = requests.post(url, headers=headers, json=data, timeout=60)
+
+        answer = r.json()['choices'][0]['message']['content']
+
+        sources = "\n\nSources:\n"
+
+        for c in chunks:
+            sources += f"- {c.doc_name} page {c.page_num}\n"
+
+        answer += sources
+
+    st.session_state.messages.append(
+        {"role": "assistant", "content": answer}
+    )
+
+    with st.chat_message("assistant"):
+        st.markdown(answer)
+
+    end = datetime.now()
+
+    st.info(
+        f"Search time {(end-start).total_seconds():.2f} sec"
+    )
+
+# ---------- CLEAR CHAT ----------
+
+if st.button("Clear chat"):
+
     st.session_state.messages = []
     st.rerun()
