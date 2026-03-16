@@ -18,31 +18,29 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем все элементы в правой части хедера (Share, Star, GitHub и т.д.) */
-    [data-testid="stHeader"] [data-testid="stToolbar"] {
-        display: none !important;
+    /* 1. Делаем панель инструментов (Share, Star и т.д.) невидимой */
+    [data-testid="stToolbar"] {
+        visibility: hidden !important;
+        opacity: 0 !important;
     }
 
-    /* 2. Скрываем кнопку Deploy и другие системные элементы */
-    .stAppDeployButton { display: none !important; }
-    [data-testid="stStatusWidget"] { display: none !important; }
-
-    /* 3. ВОЗВРАЩАЕМ кнопку сайдбара (три полоски) */
-    /* Мы обращаемся к ней через атрибут кнопки, чтобы она точно осталась */
-    header[data-testid="stHeader"] button[data-testid="stSidebarCollapseButton"] {
+    /* 2. ПРИНУДИТЕЛЬНО возвращаем видимость кнопке сайдбара */
+    /* Мы перебиваем общее правило видимости для конкретной кнопки */
+    [data-testid="stHeader"] button[data-testid="stSidebarCollapseButton"] {
         visibility: visible !important;
-        display: flex !important;
         opacity: 1 !important;
-        color: #31333F !important; /* Цвет иконки */
+        color: #31333F !important; /* Темный цвет иконки */
+        background-color: rgba(240, 242, 246, 0.5) !important; /* Легкая подложка */
     }
 
-    /* 4. Чистим остальное (меню и футер) */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    /* 3. Скрываем остальные системные элементы */
+    .stAppDeployButton { display: none !important; }
+    footer { display: none !important; }
+    #MainMenu { display: none !important; }
 
-    /* 5. Корректируем отступ сверху, чтобы чат не "прилипал" */
-    .block-container {
-        padding-top: 2rem !important;
+    /* 4. Если кнопка все равно скрыта из-за контейнера, выводим её на передний план */
+    header[data-testid="stHeader"] {
+        z-index: 999 !important;
     }
 </style>
 """, unsafe_allow_html=True)
