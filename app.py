@@ -25,9 +25,9 @@ st.markdown("""
     .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, 
     .viewerBadge_text__1JaDK, 
     
-   #MainMenu, footer, header { 
-        display: none !important; 
-    }
+    #MainMenu, footer, header {{
+    display: none !important;
+    }}
     
     
     
