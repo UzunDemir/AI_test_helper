@@ -16,45 +16,26 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
-st.markdown("""
-<style>
-    /* 1. Полностью скрываем стандартный хедер, чтобы он не мешал */
-    header[data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0) !important;
-        pointer-events: none !important; /* Пропускаем клики сквозь него */
-    }
+st.set_page_config(initial_sidebar_state="expanded")
 
-    /* 2. Скрываем все иконки (Share, GitHub, Star) и меню */
-    [data-testid="stToolbar"], #MainMenu, footer, .stAppDeployButton {
-        display: none !important;
+hide_header_style = """
+    <style>
+    /* Скрываем только декоративную полосу и фон хедера, оставляя кнопки управления */
+    [data-testid="stHeader"] {
+        background-color: rgba(0,0,0,0);
+        color: white;
     }
-
-    /* 3. ВОСКРЕШАЕМ КНОПКУ САЙДБАРА (Делаем её независимой) */
-    /* Мы принудительно вытягиваем её из скрытого хедера */
-    [data-testid="stSidebarCollapseButton"] {
-        position: fixed !important;
-        top: 10px !important;
-        left: 10px !important;
-        visibility: visible !important;
-        display: flex !important;
-        opacity: 1 !important;
-        pointer-events: auto !important; /* Возвращаем ей кликабельность */
-        z-index: 1000001 !important;
-        color: white !important; /* Сделаем её контрастной */
-        background-color: #FF4B4B !important; /* Яркий цвет, чтобы точно найти */
-        border-radius: 50% !important;
-        width: 40px !important;
-        height: 40px !important;
-        justify-content: center !important;
-        align-items: center !important;
+    
+    /* Если нужно совсем убрать верхнюю полосу, но оставить сайдбар */
+    header {visibility: hidden;}
+    
+    /* Возвращаем видимость кнопке сайдбара, если она пропала */
+    .st-emotion-cache-18ni77z {
+        visibility: visible;
     }
-
-    /* 4. Исправляем отступы основного контента */
-    .block-container {
-        padding-top: 3rem !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+    </style>
+"""
+st.markdown(hide_header_style, unsafe_allow_html=True)
 #################################
 
 # st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
