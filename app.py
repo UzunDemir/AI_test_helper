@@ -25,21 +25,9 @@ st.markdown("""
     .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, 
     .viewerBadge_text__1JaDK, 
     
-    /* Скрываем только меню и футер */
-    #MainMenu, footer {{
-        display: none !important;
-    }}
-    
-    /* Скрываем правую часть хедера (share, github и т.д.) */
-    header [data-testid="stDecoration"] {{
-        display: none !important;
-    }}
-    
-    /* Скрываем все кнопки в хедере кроме первой (кнопка боковой панели) */
-    header [data-testid="stToolbar"] button:not(:first-child) {{
-        display: none !important;
-    }}
-    
+   #MainMenu, footer, header { 
+        display: none !important; 
+    }
     
     
     
