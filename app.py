@@ -17,7 +17,7 @@ from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 # Настройки Streamlit
-st.set_page_config(layout="wide", initial_sidebar_state="expended")
+st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 st.markdown("""
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
