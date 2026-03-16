@@ -364,4 +364,4 @@ if prompt := st.chat_input("Введите ваш вопрос..."):
 # Кнопка очистки чата
 if st.button("Очистить чат"):
     st.session_state.messages = []
-    st.rerun() пропала боковая панель выдвигаемая, хотя раньше была
+    st.rerun() 
