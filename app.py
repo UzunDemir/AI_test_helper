@@ -21,24 +21,24 @@ st.set_page_config(layout="wide", initial_sidebar_state="auto")
 
 st.markdown("""
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-
-/* Скрываем служебные элементы Streamlit */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-
-/* Центрирование элементов */
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    flex-direction: column;
-    margin-top: 0vh;
-}
-
-</style>
+    <style>
+    
+    /* Скрываем служебные элементы Streamlit */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Центрирование элементов */
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 0vh;
+    }
+    
+    </style>
 """, unsafe_allow_html=True)
 #################################
 
