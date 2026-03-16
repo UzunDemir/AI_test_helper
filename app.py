@@ -18,24 +18,38 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем панель с иконками (GitHub, Star, Edit, Share) */
+    /* 1. Скрываем только правую часть (иконки Github, Share, Star) */
     [data-testid="stToolbar"] {
-        visibility: hidden;
         display: none !important;
     }
 
-    /* 2. Убираем 'Viewer Badge' (ссылка внизу, если есть) */
-    [data-testid="stViewerBadge"] {
-        display: none !important;
-    }
+    /* 2. Скрываем футер и главное меню (три точки) */
+    footer {display: none !important;}
+    #MainMenu {display: none !important;}
 
-    /* 3. Скрываем стандартное меню и футер */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    /* 3. Скрываем значок 'Deploy' и 'Viewer Badge' */
+    .stAppDeployButton {display: none !important;}
+    [data-testid="stViewerBadge"] {display: none !important;}
 
-    /* 4. Очищаем хедер, но оставляем кнопку сайдбара живой */
+    /* 4. ВАЖНО: Делаем кнопку сайдбара видимой! */
+    /* Мы убираем прозрачность и скрытие для кнопки-гамбургера */
     header[data-testid="stHeader"] {
-        background: transparent !important;
+        background-color: rgba(0,0,0,0) !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+    }
+    
+    /* Стилизуем саму кнопку открытия, чтобы она не пропадала */
+    [data-testid="stSidebarCollapseButton"] {
+        visibility: visible !important;
+        color: #31333F !important; /* Цвет иконки */
+        background-color: #f0f2f6 !important; /* Легкий фон, чтобы её было видно */
+        border-radius: 50% !important;
+    }
+
+    /* Убираем лишний отступ сверху, который появился после скрытия элементов */
+    .block-container {
+        padding-top: 2rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
