@@ -301,7 +301,10 @@ Answer:
 # ---------------- SESSION ----------------
 
 if "kb" not in st.session_state:
-    st.session_state.kb=KnowledgeBase()
+    st.session_state.kb = KnowledgeBase()
+else:
+    if not hasattr(st.session_state.kb, "files"):
+        st.session_state.kb = KnowledgeBase()
 
 if "messages" not in st.session_state:
     st.session_state.messages=[]
