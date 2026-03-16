@@ -48,22 +48,7 @@ footer, header {visibility:hidden;}
 """, unsafe_allow_html=True)
 
 
-# -----------------------------
-# SIDEBAR TOGGLE
-# -----------------------------
 
-# if "sidebar_open" not in st.session_state:
-#     st.session_state.sidebar_open = True
-
-# toggle = st.button("☰", help="Показать / скрыть меню")
-
-# if toggle:
-#     st.session_state.sidebar_open = not st.session_state.sidebar_open
-
-
-# -----------------------------
-# SIDEBAR
-# -----------------------------
 
 if st.session_state.sidebar_open:
 
