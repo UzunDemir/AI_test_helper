@@ -50,17 +50,17 @@ footer, header {visibility:hidden;}
 
 
 
-if st.session_state.sidebar_open:
 
-    with st.sidebar:
 
-        st.title("TEST-passer")
-        st.subheader("AI-ассистент по тестам")
+with st.sidebar:
 
-        st.divider()
+    st.title("TEST-passer")
+    st.subheader("AI-ассистент по тестам")
 
-        st.write(
-        """
+    st.divider()
+
+    st.write(
+    """
 Это приложение помогает студентам отвечать на тесты
 **строго по учебным материалам**.
 
