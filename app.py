@@ -18,38 +18,32 @@ tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 st.markdown("""
 <style>
-    /* 1. Скрываем только правую часть (иконки Github, Share, Star) */
-    [data-testid="stToolbar"] {
+    /* 1. Скрываем только правую часть хедера (ваши иконки) */
+    [data-testid="stHeader"] > div:first-child > div:nth-child(2) {
         display: none !important;
     }
 
-    /* 2. Скрываем футер и главное меню (три точки) */
+    /* 2. Скрываем кнопку 'Deploy' (если она еще там) */
+    .stAppDeployButton {
+        display: none !important;
+    }
+
+    /* 3. ПРИНУДИТЕЛЬНО показываем кнопку сайдбара */
+    /* Мы делаем её контрастной, чтобы вы точно её увидели */
+    button[kind="headerNoPadding"] {
+        visibility: visible !important;
+        display: block !important;
+        color: #FF4B4B !important; /* Яркий красный цвет для проверки */
+        z-index: 999999 !important;
+    }
+
+    /* 4. Убираем футер и меню 'три точки' */
     footer {display: none !important;}
     #MainMenu {display: none !important;}
 
-    /* 3. Скрываем значок 'Deploy' и 'Viewer Badge' */
-    .stAppDeployButton {display: none !important;}
-    [data-testid="stViewerBadge"] {display: none !important;}
-
-    /* 4. ВАЖНО: Делаем кнопку сайдбара видимой! */
-    /* Мы убираем прозрачность и скрытие для кнопки-гамбургера */
-    header[data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0) !important;
-        display: flex !important;
-        justify-content: flex-start !important;
-    }
-    
-    /* Стилизуем саму кнопку открытия, чтобы она не пропадала */
-    [data-testid="stSidebarCollapseButton"] {
-        visibility: visible !important;
-        color: #31333F !important; /* Цвет иконки */
-        background-color: #f0f2f6 !important; /* Легкий фон, чтобы её было видно */
-        border-radius: 50% !important;
-    }
-
-    /* Убираем лишний отступ сверху, который появился после скрытия элементов */
+    /* 5. Корректируем отступ сверху */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 1rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
