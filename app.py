@@ -16,52 +16,16 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
-# # Настройки Streamlit
-# st.set_page_config(layout="wide", initial_sidebar_state="auto")
-# st.markdown("""
-# <meta name="viewport" content="width=device-width, initial-scale=1.0">
-# <style>
-#     .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, 
-#     .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, 
-#     .viewerBadge_text__1JaDK, #MainMenu, footer, header { 
-#         display: none !important; 
-#     }
-#     .center {
-#         display: flex;
-#         justify-content: center;
-#         align-items: center;
-#         text-align: center;
-#         flex-direction: column;
-#         margin-top: 0vh;
-#     }
-# </style>
-# """, unsafe_allow_html=True)
-#################################
-
-
 # Настройки Streamlit
 st.set_page_config(layout="wide", initial_sidebar_state="auto")
-
-# Исправленный CSS - скрываем только ненужные элементы, оставляя возможность открыть боковую панель
 st.markdown("""
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    /* Скрываем только ненужные элементы, но оставляем кнопку для боковой панели */
-    .viewerBadge_container__1QSob, 
-    .styles_viewerBadge__1yB5_, 
-    .viewerBadge_link__1S137, 
-    .viewerBadge_text__1JaDK,
-    #MainMenu,
-    footer {
-        display: none !important;
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, 
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, 
+    .viewerBadge_text__1JaDK, #MainMenu, footer, header { 
+        display: none !important; 
     }
-    
-    /* Оставляем header видимым, так как там находится кнопка для боковой панели */
-    header {
-        visibility: visible !important;
-        display: block !important;
-    }
-    
     .center {
         display: flex;
         justify-content: center;
@@ -70,23 +34,9 @@ st.markdown("""
         flex-direction: column;
         margin-top: 0vh;
     }
-    
-    /* Делаем кнопку боковой панели более заметной */
-    button[kind="header"] {
-        background-color: transparent !important;
-        border: none !important;
-        color: #0066cc !important;
-    }
-    
-    button[kind="header"]:hover {
-        color: #004499 !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 #################################
-
-
-
 
 # st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
 # st.sidebar.write("[Github](https://github.com/UzunDemir)")
