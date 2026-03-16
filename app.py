@@ -16,26 +16,32 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import GPT2Tokenizer
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
-st.set_page_config(initial_sidebar_state="expanded")
 
-hide_header_style = """
+st.markdown("""
     <style>
-    /* Скрываем только декоративную полосу и фон хедера, оставляя кнопки управления */
+    /* 1. Скрываем декоративную линию сверху и фон хедера */
     [data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0);
-        color: white;
+        background: rgba(0,0,0,0);
+        height: 0px;
     }
+
+    /* 2. Скрываем только кнопку меню (три точки), но оставляем стрелку */
+    #MainMenu {visibility: hidden;}
     
-    /* Если нужно совсем убрать верхнюю полосу, но оставить сайдбар */
-    header {visibility: hidden;}
-    
-    /* Возвращаем видимость кнопке сайдбара, если она пропала */
-    .st-emotion-cache-18ni77z {
+    /* 3. Гарантируем, что кнопка сайдбара (стрелка) видна */
+    [data-testid="stSidebarCollapseButton"] {
         visibility: visible;
+        color: #000000; /* Можно задать нужный цвет стрелки */
     }
+    
+    /* 4. Скрываем футер */
+    footer {visibility: hidden;}
     </style>
-"""
-st.markdown(hide_header_style, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
+
+with st.sidebar:
+    st.write("Теперь стрелка должна быть на месте!")
+
 #################################
 
 # st.sidebar.write("[Uzun Demir](https://uzundemir.github.io/)") #[Github](https://github.com/UzunDemir)     [Linkedin](https://www.linkedin.com/in/uzundemir/)     
