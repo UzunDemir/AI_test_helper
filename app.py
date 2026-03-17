@@ -18,7 +18,7 @@ from sentence_transformers import SentenceTransformer, CrossEncoder
 
 st.set_page_config(layout="wide", initial_sidebar_state="auto")
 
-# ---------------- CSS ----------------
+# ---------------- CSS убрал header ---------------- 
 
 st.markdown("""
 <style>
@@ -70,7 +70,7 @@ AI ассистент для прохождения тестов.
 
 """)
 
-# ---------------- HEADER ----------------
+# ---------------- HEADER только левый слайд ----------------
 
 st.markdown("""
 
@@ -92,13 +92,13 @@ st.divider()
 
 # ---------------- MODEL CACHE ----------------
 
-@st.cache_resource
+@st.cache_resource # загружаем модель один раз
 def load_embedder():
-    return SentenceTransformer("all-MiniLM-L6-v2")
+    return SentenceTransformer("all-MiniLM-L6-v2") # Embedder
 
-@st.cache_resource
+@st.cache_resource # тоже
 def load_reranker():
-    return CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+    return CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2") # Reranker
 
 embedder = load_embedder()
 reranker = load_reranker()
@@ -144,7 +144,7 @@ class KnowledgeBase:
 
     def split_text(self,text,max_chars=1500):
 
-        parts=text.split("\n\n")
+        parts=text.split("\n\n") # по прараграфам
 
         chunks=[]
         current=""
