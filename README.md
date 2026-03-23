@@ -1,5 +1,5 @@
 
-```markdown
+
 # 📝 TEST-passer
 
 ### AI-Powered Test Assistant
@@ -34,7 +34,7 @@
 
 ## 🧠 How It Works
 
-```
+
 1. Upload PDF → 2. Split into chunks → 3. Generate embeddings → 4. Store in FAISS
                            ↓
 5. Ask question → 6. HyDE expansion → 7. Hybrid search → 8. Rerank → 9. LLM answer
