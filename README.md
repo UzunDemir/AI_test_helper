@@ -97,7 +97,6 @@ PRs and suggestions are welcome! Feel free to open an issue.
 
 MIT License — free to use, modify, and distribute.
 
----
 
 ⭐ **Star this repo** if you find it useful!
 ```
