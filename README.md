@@ -102,10 +102,3 @@ MIT License — free to use, modify, and distribute.
 ⭐ **Star this repo** if you find it useful!
 ```
 
-This README:
-- Uses emojis and badges for visual appeal
-- Clearly explains the value proposition
-- Shows the tech stack at a glance
-- Includes a simple architecture diagram
-- Provides setup and usage instructions
-- Keeps it short but informative
